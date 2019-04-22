@@ -1,14 +1,12 @@
 ﻿using Hifss.Extensions;
 using Hifss.LZW;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Hifss
 {
-    class GifLoader
+    internal class GifLoader
     {
         private Stream _stream;
 

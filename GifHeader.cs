@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace Hifss
 {
-    class GifHeader
+    internal class GifHeader
     {
         public enum GifVersion
         {

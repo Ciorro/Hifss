@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Hifss
 {
-    class ImageDescriptor
+    internal class ImageDescriptor
     {
         public uint X { get; private set; }
         public uint Y { get; private set; }

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Hifss.Extensions
 {
-    class CommentExtension : Extension
+    internal class CommentExtension : Extension
     {
         public override bool Read(Stream stream)
         {

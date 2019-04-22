@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Hifss
 {
-    class ColorTable
+    internal class ColorTable
     {
         public List<Color> Colors { get; private set; } = new List<Color>();
 

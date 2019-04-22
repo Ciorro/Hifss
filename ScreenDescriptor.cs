@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Hifss
 {
-    class ScreenDescriptor
+    internal class ScreenDescriptor
     {
         public uint Width { get; private set; }
         public uint Height { get; private set; }
@@ -62,7 +60,7 @@ namespace Hifss
         {
             int packedField = stream.ReadByte();
 
-            if(packedField != -1)
+            if (packedField != -1)
             {
                 HasGlobalColorTable = ((byte)packedField & 0b10000000) != 0;
                 BitsPerPixel = (uint)(((byte)packedField >> 4) & 0b00000111);

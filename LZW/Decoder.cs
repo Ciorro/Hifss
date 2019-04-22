@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Hifss.LZW
 {
-    class Decoder
+    internal class Decoder
     {
         internal const byte BYTE_SIZE = 8;
-
-        byte _readingMask = 0b00000001;
-        int _settingMask = 0b00000000000000000000000000000001;
-        int _result = 0b00000000000000000000000000000000;
-        byte _currentPosition = 0;
-        int _currentByteIndex = 0;
-        byte[] _bytes;
+        private byte _readingMask = 0b00000001;
+        private int _settingMask = 0b00000000000000000000000000000001;
+        private int _result = 0b00000000000000000000000000000000;
+        private byte _currentPosition = 0;
+        private int _currentByteIndex = 0;
+        private byte[] _bytes;
 
         public Decoder(byte[] bytes)
         {
@@ -29,10 +26,10 @@ namespace Hifss.LZW
             byte initCodeSize = codeSize;
             int code;
             int i = 0;
-           
-            while((code = ReadNextCode(codeSize)) != -1)
+
+            while ((code = ReadNextCode(codeSize)) != -1)
             {
-                if (code == (1 << initCodeSize - 1) )
+                if (code == (1 << initCodeSize - 1))
                 {
                     codeSize = initCodeSize;
                     i = 0;
@@ -40,7 +37,7 @@ namespace Hifss.LZW
                 }
 
                 i++;
-                if(i == increaseBitLengthValue && codeSize < 12)
+                if (i == increaseBitLengthValue && codeSize < 12)
                 {
                     increaseBitLengthValue = i + (int)Math.Pow(2, codeSize++);
                 }
@@ -54,7 +51,7 @@ namespace Hifss.LZW
         public int ReadNextCode(byte length)
         {
             prepare();
-            
+
             for (int i = 0; i < length; i++)
             {
                 if (_currentByteIndex == _bytes.Length)

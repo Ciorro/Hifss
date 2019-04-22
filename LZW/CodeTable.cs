@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Hifss.LZW
 {
-    class CodeTable
+    internal class CodeTable
     {
         private Dictionary<uint, string> _table = new Dictionary<uint, string>();
         private uint _index = 0;
@@ -21,7 +20,7 @@ namespace Hifss.LZW
         {
             initialize(lzwMinCodeSize);
         }
-        
+
         public void Add(string value)
         {
             _table.Add(_index, value);
@@ -37,7 +36,7 @@ namespace Hifss.LZW
         {
             _table.Clear();
 
-            for (_index = 0; _index < Math.Pow(2, lzwMinCodeSize); _index++) 
+            for (_index = 0; _index < Math.Pow(2, lzwMinCodeSize); _index++)
             {
                 _table.Add(_index, _index.ToString());
             }

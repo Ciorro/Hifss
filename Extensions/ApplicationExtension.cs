@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace Hifss.Extensions
@@ -8,10 +7,9 @@ namespace Hifss.Extensions
     {
         private const int IDENTIFIER_LENGTH = 8;
         private const int AUTH_LENGTH = 3;
-
-        string _application;
-        string _auth;
-        byte[] _appData;
+        private string _application;
+        private string _auth;
+        private byte[] _appData;
 
         public override bool Read(Stream stream)
         {

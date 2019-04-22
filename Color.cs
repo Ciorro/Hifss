@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Hifss
+﻿namespace Hifss
 {
-    class Color
+    internal class Color
     {
         public byte R;
         public byte G;

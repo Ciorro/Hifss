@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Hifss.Extensions
 {
-    class ExtensionResolver
+    internal class ExtensionResolver
     {
         private Dictionary<int, Type> _extCodeMap = new Dictionary<int, Type>()
         {

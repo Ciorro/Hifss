@@ -1,12 +1,9 @@
 ﻿using Hifss.Extensions;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Hifss
 {
-    class GifReader
+    internal class GifReader
     {
         public const int ExtensionIntroducer = 0x21;
         public const int ImageDescriptor = 0x2C;

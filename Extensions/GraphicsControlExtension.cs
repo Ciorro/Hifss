@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace Hifss.Extensions
 {
-    class GraphicsControlExtension : Extension
+    internal class GraphicsControlExtension : Extension
     {
         public enum FrameDisposalMethod
         {
@@ -89,7 +86,7 @@ namespace Hifss.Extensions
         {
             int readByte = stream.ReadByte();
 
-            if(readByte != -1)
+            if (readByte != -1)
             {
                 ExtensionSize = (uint)readByte;
                 return true;

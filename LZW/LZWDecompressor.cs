@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Hifss.LZW
 {
-    class LZWDecompressor
+    internal class LZWDecompressor
     {
         private byte _minCodeSize;
         private byte _subBlockSize;
@@ -23,7 +21,7 @@ namespace Hifss.LZW
                 values = null;
                 return false;
             }
-            
+
             success &= readAllSubBlocks(stream);
             success &= getCodes();
             success &= decode();
@@ -79,7 +77,7 @@ namespace Hifss.LZW
         {
             foreach (var strVal in strValues)
             {
-                if (strVal != "CC") 
+                if (strVal != "CC")
                     _decompressedData.Add(uint.Parse(strVal));
             }
         }
@@ -93,7 +91,7 @@ namespace Hifss.LZW
         {
             Decoder decoder = new Decoder(_data.ToArray());
             _codeStream.AddRange(decoder.ReadAllCodes(_minCodeSize));
-            
+
             //TODO Error checking
             return true;
         }
@@ -129,7 +127,7 @@ namespace Hifss.LZW
             int readByte = stream.ReadByte();
 
             if (readByte != -1 && readByte != 0)
-            { 
+            {
                 _subBlockSize = (byte)readByte;
             }
             else
