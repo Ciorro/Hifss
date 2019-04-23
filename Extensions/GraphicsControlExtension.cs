@@ -4,11 +4,6 @@ namespace Hifss.Extensions
 {
     internal class GraphicsControlExtension : Extension
     {
-        public enum FrameDisposalMethod
-        {
-            None, Cover, Clear
-        }
-
         public FrameDisposalMethod DisposalMethod { get; private set; }
         public bool HasTransparency { get; private set; }
         public int Delay { get; private set; }
@@ -19,7 +14,7 @@ namespace Hifss.Extensions
         public override bool Read(Stream stream)
         {
             bool success = true;
-            
+
             success &= readSize(stream);
             success &= readPackedFiled(stream);
             success &= readDelay(stream);

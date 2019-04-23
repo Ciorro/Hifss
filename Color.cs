@@ -1,6 +1,6 @@
 ﻿namespace Hifss
 {
-    internal class Color
+    public class Color
     {
         public byte R;
         public byte G;

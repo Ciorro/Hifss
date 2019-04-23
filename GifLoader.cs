@@ -29,6 +29,14 @@ namespace Hifss
             return _images;
         }
 
+        public Color GetBackColor()
+        {
+            if (ScreenDescriptor.HasGlobalColorTable)
+                return GlobalColorTable[(int)ScreenDescriptor.BackgroundColorIndex];
+            else
+                return new Color(0, 0, 0, 0);
+        }
+
         public bool LoadGif()
         {
             bool success = true;
@@ -104,14 +112,19 @@ namespace Hifss
 
             int transparentColorIndex = -1;
             int delay = 0;
+            FrameDisposalMethod disposalMethod = FrameDisposalMethod.Clear;
 
             if (_extensions.Count > 0 && _extensions.Last() is GraphicsControlExtension)
             {
                 GraphicsControlExtension gce = _extensions.Last() as GraphicsControlExtension;
                 delay = gce.Delay;
-                transparentColorIndex = gce.TransparentColorIndex;
-            }
 
+                if(gce.HasTransparency)
+                    transparentColorIndex = gce.TransparentColorIndex;
+
+                disposalMethod = gce.DisposalMethod;
+            }
+            
             for (int i = 0; i < data.Length; i += 4)
             {
                 Color color = localColorTable[(int)colorIndexes[i / 4]];
@@ -128,7 +141,7 @@ namespace Hifss
             if (imageDescriptor.Interlaced)
                 data = interlace(data, localW, localH);
 
-            _images.Add(new GifImage(data, localX, localY, localW, localH, delay));
+            _images.Add(new GifImage(data, localX, localY, localW, localH, delay, disposalMethod));
         }
 
         private byte[] interlace(byte[] data, uint width, uint height)

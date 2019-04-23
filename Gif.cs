@@ -7,6 +7,10 @@ namespace Hifss
     {
         public List<GifImage> Frames = new List<GifImage>();
 
+        public uint Width;
+        public uint Height;
+        public Color BackColor;
+
         public Gif()
         {
         }
@@ -33,6 +37,9 @@ namespace Hifss
                 if (success)
                 {
                     Frames = loader.GetImages();
+                    Width = loader.ScreenDescriptor.Width;
+                    Height = loader.ScreenDescriptor.Height;
+                    BackColor = loader.GetBackColor();
                 }
             }
 
