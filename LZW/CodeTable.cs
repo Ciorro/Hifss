@@ -5,10 +5,11 @@ namespace Hifss.LZW
 {
     internal class CodeTable
     {
-        private Dictionary<uint, string> _table = new Dictionary<uint, string>();
+        private Dictionary<uint, uint[]> _table = new Dictionary<uint, uint[]>();
         private uint _index = 0;
+        private byte _lzwMinCodeSize = 2;
 
-        public string this[uint i]
+        public uint[] this[uint i]
         {
             get
             {
@@ -16,12 +17,13 @@ namespace Hifss.LZW
             }
         }
 
-        public CodeTable(uint lzwMinCodeSize)
+        public CodeTable(byte lzwMinCodeSize)
         {
-            initialize(lzwMinCodeSize);
+            _lzwMinCodeSize = lzwMinCodeSize;
+            Initialize();
         }
 
-        public void Add(string value)
+        public void Add(params uint[] value)
         {
             _table.Add(_index, value);
             _index++;
@@ -32,17 +34,18 @@ namespace Hifss.LZW
             return _table.ContainsKey(value);
         }
 
-        private void initialize(uint lzwMinCodeSize)
+        public void Initialize()
         {
+            _index = 0;
             _table.Clear();
-
-            for (_index = 0; _index < Math.Pow(2, lzwMinCodeSize); _index++)
+            
+            for (int i = 0; i < (1 << _lzwMinCodeSize); i++)
             {
-                _table.Add(_index, _index.ToString());
+                Add(_index);
             }
 
-            Add("CC");
-            Add("EOI");
+            Add((uint)(1 << _lzwMinCodeSize));
+            Add((uint)(1 << _lzwMinCodeSize) + 1);
         }
     }
 }

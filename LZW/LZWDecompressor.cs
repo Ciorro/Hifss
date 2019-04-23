@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Hifss.LZW
 {
@@ -10,6 +12,7 @@ namespace Hifss.LZW
         private List<byte> _data = new List<byte>();
         private List<uint> _codeStream = new List<uint>();
         private List<uint> _decompressedData = new List<uint>();
+        private Decoder _decoder = new Decoder();
 
         public bool Decompress(Stream stream, out uint[] values)
         {
@@ -43,43 +46,39 @@ namespace Hifss.LZW
 
                 if (codeTable.HasCode(code))
                 {
-                    if (codeTable[code] == "EOI")
+                    if (codeTable[code][0] == (1 << _minCodeSize) + 1)
                     {
                         break;
                     }
-                    else if (codeTable[code] == "CC")
+                    else if (codeTable[code][0] == (1 << _minCodeSize))
                     {
-                        codeTable = new CodeTable(_minCodeSize);
+                        codeTable.Initialize();
                         i++;
                         output(_codeStream[i]);
                     }
                     else
                     {
-                        output(codeTable[code].Split(','));
-                        string prevCodeValue = codeTable[_codeStream[i - 1]];
-                        codeTable.Add($"{prevCodeValue},{codeTable[code].Split(',')[0]}");
+                        output(codeTable[code]);
+
+                        List<uint> prevCode = new List<uint>(codeTable[_codeStream[i - 1]]);
+                        prevCode.Add(codeTable[code][0]);
+
+                        codeTable.Add(prevCode.ToArray());
                     }
                 }
                 else
                 {
-                    string prevCodeValue = codeTable[_codeStream[i - 1]].Split(',')[0]; //K
-                    output(codeTable[_codeStream[i - 1]].Split(','));
-                    output(prevCodeValue);
+                    uint prevCodeValue = codeTable[_codeStream[i - 1]][0];
 
-                    codeTable.Add($"{codeTable[_codeStream[i - 1]]},{prevCodeValue}");
+                    List<uint> prevAndCurrentCode = new List<uint>(codeTable[_codeStream[i - 1]]);
+                    prevAndCurrentCode.Add(prevCodeValue);
+
+                    output(prevAndCurrentCode.ToArray());
+                    codeTable.Add(prevAndCurrentCode.ToArray());
                 }
             }
 
             return true;
-        }
-
-        private void output(params string[] strValues)
-        {
-            foreach (var strVal in strValues)
-            {
-                if (strVal != "CC")
-                    _decompressedData.Add(uint.Parse(strVal));
-            }
         }
 
         private void output(params uint[] values)
@@ -89,8 +88,7 @@ namespace Hifss.LZW
 
         private bool getCodes()
         {
-            Decoder decoder = new Decoder(_data.ToArray());
-            _codeStream.AddRange(decoder.ReadAllCodes(_minCodeSize));
+            _codeStream.AddRange(_decoder.ReadAllCodes(_data, _minCodeSize));
 
             //TODO Error checking
             return true;

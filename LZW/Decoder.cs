@@ -11,15 +11,15 @@ namespace Hifss.LZW
         private int _result = 0b00000000000000000000000000000000;
         private byte _currentPosition = 0;
         private int _currentByteIndex = 0;
-        private byte[] _bytes;
+        private List<byte> _bytes;
 
-        public Decoder(byte[] bytes)
+        public Decoder()
         {
-            _bytes = bytes;
         }
 
-        public List<uint> ReadAllCodes(byte codeSize)
+        public List<uint> ReadAllCodes(List<byte> data, byte codeSize)
         {
+            _bytes = data;
             List<uint> codes = new List<uint>();
 
             int increaseBitLengthValue = (int)Math.Pow(2, codeSize++);
@@ -33,13 +33,13 @@ namespace Hifss.LZW
                 {
                     codeSize = initCodeSize;
                     i = 0;
-                    increaseBitLengthValue = i + (int)Math.Pow(2, initCodeSize - 1);
+                    increaseBitLengthValue = i + (int)(1 << initCodeSize - 1);
                 }
 
                 i++;
                 if (i == increaseBitLengthValue && codeSize < 12)
                 {
-                    increaseBitLengthValue = i + (int)Math.Pow(2, codeSize++);
+                    increaseBitLengthValue = i + (int)(1 << codeSize++);
                 }
 
                 codes.Add((uint)code);
@@ -54,7 +54,7 @@ namespace Hifss.LZW
 
             for (int i = 0; i < length; i++)
             {
-                if (_currentByteIndex == _bytes.Length)
+                if (_currentByteIndex == _bytes.Count)
                     return -1;
 
                 if ((_bytes[_currentByteIndex] & _readingMask) != 0)
