@@ -11,6 +11,7 @@ namespace Hifss
         public uint Height { get; private set; }
         public uint LocalColorTableSize { get; private set; }
         public bool HasLocalColorTable { get; private set; }
+        public bool Interlaced { get; private set; }
 
         public uint EntryCount
         {
@@ -35,6 +36,7 @@ namespace Hifss
             if (readByte != -1)
             {
                 HasLocalColorTable = ((byte)readByte & 0b10000000) != 0;
+                Interlaced = ((byte)readByte & 0b01000000) != 0;
                 LocalColorTableSize = (uint)((byte)readByte & 0b00000111);
             }
             else

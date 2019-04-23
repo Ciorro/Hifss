@@ -18,9 +18,8 @@ namespace Hifss.Extensions
 
         public override bool Read(Stream stream)
         {
-            //Console.WriteLine("Extension: Graphics control extension.");
             bool success = true;
-
+            
             success &= readSize(stream);
             success &= readPackedFiled(stream);
             success &= readDelay(stream);

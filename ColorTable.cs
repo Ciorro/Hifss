@@ -5,11 +5,11 @@ namespace Hifss
 {
     internal class ColorTable
     {
-        public List<Color> Colors { get; private set; } = new List<Color>();
+        private List<Color> _colors { get; set; } = new List<Color>();
 
         public Color this[int index]
         {
-            get { return Colors[index]; }
+            get { return _colors[index]; }
         }
 
         public bool ReadColors(Stream stream, uint colorCount)
@@ -21,7 +21,7 @@ namespace Hifss
                     byte[] color = new byte[3];
                     int readBytes = stream.Read(color, 0, 3);
 
-                    Colors.Add(new Color(color[0], color[1], color[2]));
+                    _colors.Add(new Color(color[0], color[1], color[2]));
                 }
                 catch
                 {

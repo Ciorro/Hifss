@@ -7,13 +7,8 @@ namespace Hifss.Extensions
     {
         public override bool Read(Stream stream)
         {
-            Console.WriteLine("Extension: Comment extension. Skipping...");
-
             int bytesToSkip = stream.ReadByte();
-            for (int i = 0; i < bytesToSkip + 1; i++)
-            {
-                stream.ReadByte();
-            }
+            stream.Seek(bytesToSkip, SeekOrigin.Current);
 
             return true;
         }

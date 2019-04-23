@@ -31,7 +31,9 @@ namespace Hifss
                 success = loader.LoadGif();
 
                 if (success)
+                {
                     Frames = loader.GetImages();
+                }
             }
 
             return success;

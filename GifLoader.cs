@@ -1,5 +1,6 @@
 ﻿using Hifss.Extensions;
 using Hifss.LZW;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Hifss
 
         private List<GifImage> _images = new List<GifImage>();
         private List<Extension> _extensions = new List<Extension>();
+        private uint _currentInterlaceIndex = 0;
 
         public GifHeader Header;
         public ScreenDescriptor ScreenDescriptor;
@@ -103,7 +105,7 @@ namespace Hifss
             int transparentColorIndex = -1;
             int delay = 0;
 
-            if (_extensions.Last() is GraphicsControlExtension)
+            if (_extensions.Count > 0 && _extensions.Last() is GraphicsControlExtension)
             {
                 GraphicsControlExtension gce = _extensions.Last() as GraphicsControlExtension;
                 delay = gce.Delay;
@@ -123,7 +125,51 @@ namespace Hifss
                     data[i + 3] = byte.MaxValue;
             }
 
+            if (imageDescriptor.Interlaced)
+                data = interlace(data, localW, localH);
+
             _images.Add(new GifImage(data, localX, localY, localW, localH, delay));
+        }
+
+        private byte[] interlace(byte[] data, uint width, uint height)
+        {
+            byte[] interlaced = new byte[data.Length];
+
+            _currentInterlaceIndex = 0;
+
+            //Pass 1
+            for (uint i = 0 * width * 4; i < data.Length; i += width * 4 * 8)
+            {
+                fillRow(ref interlaced, data, i, width * 4);
+            }
+
+            //Pass 2
+            for (uint i = 4 * width * 4; i < data.Length; i += width * 4 * 8)
+            {
+                fillRow(ref interlaced, data, i, width * 4);
+            }
+
+            //Pass 3
+            for (uint i = 2 * width * 4; i < data.Length; i += width * 4 * 4)
+            {
+                fillRow(ref interlaced, data, i, width * 4);
+            }
+
+            //Pass 4
+            for (uint i = 1 * width * 4; i < data.Length; i += width * 4 * 2)
+            {
+                fillRow(ref interlaced, data, i, width * 4);
+            }
+
+            return interlaced;
+        }
+
+        private void fillRow(ref byte[] interlaced, byte[] source, uint startIndex, uint count)
+        {
+            for (uint i = startIndex; i < startIndex + count; i++)
+            {
+                interlaced[i] = source[_currentInterlaceIndex++];
+            }
         }
     }
 }

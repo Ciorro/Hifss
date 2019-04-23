@@ -13,9 +13,7 @@ namespace Hifss.Extensions
 
         public override bool Read(Stream stream)
         {
-            //Console.WriteLine("Extension: Application extension.");
-
-            //Skipping application idenctifcator length since it's known (1 byte)
+            //Skipping application identificator length since it's known (1 byte)
             stream.Seek(1, SeekOrigin.Current);
 
             readAppIdentifier(stream);
@@ -39,7 +37,6 @@ namespace Hifss.Extensions
             stream.Read(authBuffer, 0, AUTH_LENGTH);
 
             _auth = Encoding.ASCII.GetString(authBuffer);
-            //Console.WriteLine("Application authentication: " + _auth);
         }
 
         private void readAppIdentifier(Stream stream)
@@ -48,7 +45,6 @@ namespace Hifss.Extensions
             stream.Read(identBuffer, 0, IDENTIFIER_LENGTH);
 
             _application = Encoding.ASCII.GetString(identBuffer);
-            //Console.WriteLine("Application identifier: " + _application);
         }
     }
 }

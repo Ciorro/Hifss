@@ -7,18 +7,12 @@ namespace Hifss.Extensions
     {
         public override bool Read(Stream stream)
         {
-            Console.WriteLine("Extension: Plain text extension. Skipping...");
-
-            //TODO -1 detection
-            int bytesToSkip = stream.ReadByte();
-
-            for (int i = 0; i < bytesToSkip; i++)
+            //Skipping 2 blocks of data.
+            for (int j = 0; j < 2; j++)
             {
-                stream.ReadByte();
+                int bytesToSkip = stream.ReadByte();
+                stream.Seek(bytesToSkip, SeekOrigin.Current);
             }
-
-            int currByte = 0;
-            while ((currByte = stream.ReadByte()) != 0 || currByte != -1) ;
 
             return true;
         }
